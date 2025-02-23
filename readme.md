@@ -1,30 +1,30 @@
-# Apprentissage du MVC
+# Learning MVC
 
-Ce guide vous accompagnera étape par étape dans la création d'une application MVC avec PHP et PDO.
+This guide will walk you through creating an MVC application with PHP and PDO step by step.
 
 ---
 
-## **Phase 1 : Application simple avec CRUD (Tout dans le même dossier)**
-### Objectif : Comprendre les bases de PHP et PDO en construisant un CRUD simple.
+## **Phase 1: Simple Application with CRUD (All in the Same Folder)**
+### Objective: Understand the basics of PHP and PDO by building a simple CRUD.
 
-### **Structure du projet :**
+### **Project Structure:**
 ```
 /crud-app
-   |-- index.php       # Liste des enregistrements
-   |-- create.php      # Formulaire d'ajout
-   |-- store.php      # Traitement de l'ajout
-   |-- edit.php        # Formulaire de modification
-   |-- update.php      # Traitement de la modification
-   |-- delete.php      # Suppression d'un enregistrement
-   |-- db.php          # Fichier de connexion à la base de données
+   |-- index.php       # Records listing
+   |-- create.php      # Add form
+   |-- store.php       # Add processing
+   |-- edit.php        # Edit form
+   |-- update.php      # Edit processing
+   |-- delete.php      # Record deletion
+   |-- db.php          # Database connection file
 ```
 
 ---
 
-## **Phase 2 : Introduction du Modèle (Séparation de la communication avec la base de données)**
-### Objectif : Mieux organiser le code en séparant l'accès aux données.
+## **Phase 2: Introduction to Model (Separating Database Communication)**
+### Objective: Better organize code by separating data access.
 
-### **Nouvelle structure :**
+### **New Structure:**
 ```
 /crud-app
    |-- index.php        
@@ -32,24 +32,24 @@ Ce guide vous accompagnera étape par étape dans la création d'une application
    |-- edit.php       
    |-- delete.php      
    |-- models/
-       |-- Database.php    # Classe de connexion PDO
-       |-- Contact.php     # Classe pour les opérations CRUD
+       |-- Database.php    # PDO connection class
+       |-- Contact.php     # Class for CRUD operations
 ```
 
 ---
 
-## **Phase 3 : Séparation du Code Métier et des Vues**
-### Objectif : Suivre une meilleure organisation du code MVC.
+## **Phase 3: Separation of Business Logic and Views**
+### Objective: Follow better MVC code organization.
 
-### **Nouvelle structure :**
+### **New Structure:**
 ```
 /crud-app
    |-- index.php        
    |-- views/
        |-- header.php      
        |-- footer.php      
-       |-- list.php        # Liste des contacts
-       |-- form.php        # Formulaire réutilisable (ajout/modification)
+       |-- list.php        # Contacts list
+       |-- form.php        # Reusable form (add/edit)
    |-- models/
        |-- Database.php    
        |-- Contact.php     
@@ -57,10 +57,10 @@ Ce guide vous accompagnera étape par étape dans la création d'une application
 
 ---
 
-## **Phase 4 : Utilisation de `.htaccess` pour Rediriger vers `index.php`**
-### Objectif : Améliorer les URLs et centraliser les requêtes.
+## **Phase 4: Using `.htaccess` to Redirect to `index.php`**
+### Objective: Improve URLs and centralize requests.
 
-**Fichier `.htaccess` :**
+**`.htaccess` File:**
 ```apache
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -70,12 +70,12 @@ RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
 ---
 
-## **Phase 5 : Création d’un Routeur avec un `switch`**
-### Objectif : Centraliser la logique de navigation.
+## **Phase 5: Creating a Router with a `switch`**
+### Objective: Centralize navigation logic.
 
-À ce stade, nous avons toujours le code métier réparti dans des fichiers comme `index.php`, `create.php`, etc. Nous allons maintenant centraliser la gestion des routes.
+At this stage, we still have business logic spread across files like `index.php`, `create.php`, etc. We will now centralize route management.
 
-**Exemple de routeur dans `index.php` :**
+**Router example in `index.php`:**
 ```php
 $url = $_GET['url'] ?? 'home';
 
@@ -87,16 +87,16 @@ switch ($url) {
         require 'create.php';
         break;
     default:
-        echo "Page non trouvée";
+        echo "Page not found";
 }
 ```
 
 ---
 
-## **Phase 6 : Transformer le Routeur en Classe**
-### Objectif : Rendre le routeur plus flexible et réutilisable.
+## **Phase 6: Transform Router into a Class**
+### Objective: Make the router more flexible and reusable.
 
-**Exemple de `Router.php` :**
+**Example of `Router.php`:**
 ```php
 class Router {
     private $routes = [];
@@ -109,7 +109,7 @@ class Router {
         if (array_key_exists($url, $this->routes)) {
             require $this->routes[$url];
         } else {
-            echo "Page non trouvée";
+            echo "Page not found";
         }
     }
 }
@@ -117,10 +117,10 @@ class Router {
 
 ---
 
-## **Phase 7 : Utilisation des Contrôleurs sous forme de Classes**
-### Objectif : Suivre le modèle MVC classique avec des contrôleurs dédiés.
+## **Phase 7: Using Controllers as Classes**
+### Objective: Follow the classic MVC pattern with dedicated controllers.
 
-**Exemple de `ContactController.php` :**
+**Example of `ContactController.php`:**
 ```php
 class ContactController {
     public function index() {
@@ -132,10 +132,10 @@ class ContactController {
 
 ---
 
-## **Phase 8 : Gestion de la Connexion avec un Singleton (`Database.php`)**
-### Objectif : Éviter les multiples connexions à la base de données.
+## **Phase 8: Managing Connection with a Singleton (`Database.php`)**
+### Objective: Avoid multiple database connections.
 
-**Exemple de `Database.php` :**
+**Example of `Database.php`:**
 ```php
 class Database {
     private static $instance = null;
@@ -156,10 +156,10 @@ class Database {
 
 ---
 
-## **Phase 9 : Utilisation de `composer autoload`**
-### Objectif : Remplacer les `require` par un autoloading automatique.
+## **Phase 9: Using `composer autoload`**
+### Objective: Replace `require` with automatic autoloading.
 
-1. **Créer un fichier `composer.json` :**
+1. **Create a `composer.json` file:**
 ```json
 {
     "autoload": {
@@ -169,11 +169,11 @@ class Database {
     }
 }
 ```
-2. **Exécuter la commande :**
+2. **Execute the command:**
 ```sh
 composer dump-autoload
 ```
-3. **Remplacer les `require` par :**
+3. **Replace `require` with:**
 ```php
 use App\Models\Contact;
 ```
@@ -181,5 +181,4 @@ use App\Models\Contact;
 ---
 
 ## **Conclusion**
-Avec ce plan, vous progresserez étape par étape jusqu'à une architecture MVC complète et professionnelle ! 🚀
-
+With this plan, you'll progress step by step toward a complete and professional MVC architecture! 🚀
