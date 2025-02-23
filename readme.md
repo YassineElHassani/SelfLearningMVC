@@ -1,6 +1,6 @@
 # Learning MVC
 
-This guide will walk you through creating an MVC application with PHP and PDO step by step.
+This guide will walk you through creating an MVC application with PHP and PDO step by step. 
 
 ---
 
