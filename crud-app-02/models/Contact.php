@@ -41,7 +41,7 @@ class Contact {
         return $stmt->fetch();
     }
 
-    public function updateContant($id, $name, $email, $phone) {
+    public function updateContact($id, $name, $email, $phone) {
         $conn = Database::getConnection();
         $stmt = $conn->prepare("UPDATE contacts SET name = :name, email = :email, phone = :phone WHERE id = :id");
         $stmt->execute([

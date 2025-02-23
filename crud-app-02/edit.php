@@ -16,7 +16,7 @@ if(isset($_POST['submit'])) {
     $phone = $_POST['phone'];
 
     $update = new Contact();
-    $update->updateContant($id, $name, $email, $phone);
+    $update->updateContact($id, $name, $email, $phone);
 
     header('location: ./index.php');
     exit;
